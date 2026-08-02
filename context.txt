@@ -1,7 +1,7 @@
 # ============================================================
 # E-Commerce Platform — context.txt
 # Purpose: Phase tracker for current and future development
-# Updated: Phase 3 Complete
+# Updated: Phase 4 Complete
 # ============================================================
 
 ## ✅ PHASE 1 — COMPLETE: Project Setup & Foundation
@@ -98,14 +98,35 @@
 
 ---
 
-## 📋 PHASE 4 — TODO: Order, Checkout & Payment
+## ✅ PHASE 4 — COMPLETE: Order, Checkout & Payment
 
-[ ] Order entity + OrderItem entity + OrderStatusHistory entity + Payment entity + Shipment entity
-[ ] OrderState pattern for order status transitions
-[ ] Payment Strategy pattern (Cash on Delivery strategy)
-[ ] Observer pattern for order notifications
-[ ] iText PDF invoice generation
-[ ] OrderService, OrderController, AdminOrderController
+### Entities & Repositories
+✅ Order entity & OrderRepository (unique orderNumber, address snapshot)
+✅ OrderItem entity & OrderItemRepository (snapshot product price/sku)
+✅ OrderStatusHistory entity & OrderStatusHistoryRepository (audit trail)
+✅ Payment entity & PaymentRepository (transaction tracking)
+✅ Shipment entity & ShipmentRepository (tracking number, delivery state)
+
+### Design Patterns
+✅ State Pattern: OrderState interface + Pending, Processing, Shipped, Delivered, Cancelled, Refunded states + OrderStateFactory
+✅ Strategy Pattern: PaymentStrategy interface + CashOnDelivery, Card strategies + PaymentStrategyFactory
+✅ Observer Pattern: OrderPlacedEvent, OrderStatusChangedEvent + OrderNotificationListener
+
+### PDF Generation
+✅ InvoicePdfService (iText 7 styled invoice PDF stream)
+
+### DTOs
+✅ CheckoutRequest, OrderStatusUpdateRequest, ShipmentUpdateRequest
+✅ OrderDTO, OrderDetailDTO, OrderItemDTO, PaymentDTO, ShipmentDTO, OrderStatusHistoryDTO
+
+### Services & Controllers
+✅ PaymentService & OrderService (checkout execution, stock decrement/restore, coupon usage count)
+✅ OrderController (/orders/checkout, /orders, /orders/{id}, /orders/{id}/cancel, /orders/{id}/invoice)
+✅ AdminOrderController (/admin/orders, /admin/orders/{id}/status, /admin/orders/{id}/shipment)
+
+### Tests
+✅ OrderStateTest (State pattern unit tests) — 6 test cases
+✅ OrderServiceTest (Checkout, cancellation, stock management) — 4 test cases
 
 ---
 
