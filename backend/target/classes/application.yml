@@ -1,0 +1,88 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: ecommerce-backend
+
+  # ─── Database ────────────────────────────────────────────────
+  datasource:
+    url: jdbc:mysql://localhost:3306/ecommerce_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 300000
+      connection-timeout: 20000
+
+  # ─── JPA / Hibernate ─────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: validate          # schema.sql manages DDL; validate only
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        use_sql_comments: true
+
+  # ─── File Upload ─────────────────────────────────────────────
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+
+  # ─── Mail (stubbed — change for production SMTP) ─────────────
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:noreply@ecommerce.com}
+    password: ${MAIL_PASSWORD:changeme}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+# ─── JWT Configuration ────────────────────────────────────────
+jwt:
+  secret: ${JWT_SECRET:ecommerce-super-secret-jwt-key-min-256-bits-long-change-in-prod}
+  expiration-ms: 86400000        # 24 hours
+  refresh-expiration-ms: 604800000  # 7 days
+
+# ─── File Storage ─────────────────────────────────────────────
+storage:
+  upload-dir: uploads/
+
+# ─── Business Constants ───────────────────────────────────────
+ecommerce:
+  tax-rate: 0.18                 # 18% GST
+  shipping-threshold: 500.0      # free shipping above ₹500
+  shipping-charge: 49.0          # flat shipping fee
+
+# ─── Swagger / OpenAPI ────────────────────────────────────────
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
+  info:
+    title: E-Commerce API
+    description: Production-ready E-Commerce Platform REST API
+    version: 1.0.0
+
+# ─── Logging ─────────────────────────────────────────────────
+logging:
+  level:
+    com.ecommerce: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN

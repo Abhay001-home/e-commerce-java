@@ -1,0 +1,277 @@
+# ============================================================
+# E-Commerce Platform — context.txt
+# Purpose: Phase tracker for current and future development
+# Updated: Phase 1 Complete
+# ============================================================
+
+## ✅ PHASE 1 — COMPLETE: Project Setup & Foundation
+
+### Infrastructure
+✅ Spring Boot 3.2.5 Maven project (Java 17)
+✅ MySQL database connection (localhost:3306/ecommerce_db)
+✅ application.yml — datasource, JWT, mail, file upload, Swagger
+✅ BCrypt(12) password encoding
+✅ CORS configuration (localhost:5173 / localhost:3000)
+
+### Entities (JPA)
+✅ User entity (with roles, addresses, audit timestamps)
+✅ Role entity (ROLE_USER, ROLE_ADMIN)
+✅ Address entity (HOME/OFFICE/OTHER, default flag)
+
+### Repositories (Spring Data JPA)
+✅ UserRepository (findByEmail, existsByEmail, findByEmailWithRoles)
+✅ RoleRepository (findByName)
+✅ AddressRepository (findByUserId, clearDefaultByUserId bulk update)
+
+### DTOs
+✅ RegisterRequest (with Bean Validation)
+✅ LoginRequest (with Bean Validation)
+✅ AddressRequest (with Bean Validation)
+✅ ChangePasswordRequest (with Bean Validation)
+✅ AuthResponse (access token, refresh token, user info)
+✅ UserDTO (safe user representation, no password)
+✅ AddressDTO
+✅ ApiResponse<T> (generic response wrapper with Factory Methods)
+
+### Security (JWT + Spring Security)
+✅ JwtUtil (Singleton) — generate, validate, extract claims (HMAC-SHA256)
+✅ JwtAuthenticationFilter (OncePerRequestFilter, Chain of Responsibility)
+✅ CustomUserDetailsService (loads user by email, maps roles to authorities)
+✅ SecurityConfig — RBAC, stateless sessions, filter chain, CORS
+
+### Services
+✅ AuthService — register, login, token refresh
+✅ UserService — profile CRUD, address CRUD, change password
+
+### Controllers
+✅ AuthController — POST /auth/register, /auth/login, /auth/refresh
+✅ UserController — GET/PATCH /users/me, address CRUD at /users/me/addresses
+
+### Exception Handling
+✅ ResourceNotFoundException (404)
+✅ BadRequestException (400)
+✅ ForbiddenException (403)
+✅ GlobalExceptionHandler (@RestControllerAdvice) — validation, security, generic
+
+### Documentation
+✅ SwaggerConfig — OpenAPI 3.0, JWT bearer auth in Swagger UI
+✅ Accessible: http://localhost:8080/api/swagger-ui.html
+
+### Database
+✅ sql/schema.sql — full schema (all phases: Users→Reviews)
+   Tables: roles, users, user_roles, addresses, categories, brands,
+           products, product_images, product_variants, product_specifications,
+           inventory, coupons, carts, cart_items, wishlists, wishlist_items,
+           orders, order_items, payments, shipments, order_status_history, reviews
+✅ Seed data: admin user, sample categories, sample brands
+
+### Tests
+✅ AuthServiceTest (JUnit 5 + Mockito): register success, duplicate email
+
+---
+
+## ⏳ PHASE 2 — IN PROGRESS: Product & Category Module
+
+### TODO:
+[ ] Category entity (parent/child hierarchy, slug, image)
+[ ] CategoryRepository (findBySlug, findByParentIdIsNull)
+[ ] CategoryService (CRUD, tree structure)
+[ ] CategoryController (GET/POST/PUT/DELETE /categories)
+
+[ ] Brand entity
+[ ] BrandRepository
+[ ] BrandService (CRUD)
+[ ] BrandController (GET/POST/PUT/DELETE /brands)
+
+[ ] Product entity (price, mrp, discount, avgRating, soldCount)
+[ ] ProductImage entity + ProductVariant entity + ProductSpecification entity
+[ ] Inventory entity (quantity, lowStockQty)
+[ ] ProductRepository (JpaSpecificationExecutor for filters)
+[ ] ProductSearchSpec (Specification<Product> for dynamic filters)
+[ ] ProductService (CRUD, image upload, inventory management)
+[ ] ProductController (GET/POST/PUT/DELETE /products, search/filter/sort/paginate)
+[ ] InventoryService (updateStock, checkAvailability, getLowStockAlerts)
+
+[ ] Request DTOs: ProductRequest, CategoryRequest, BrandRequest
+[ ] Response DTOs: ProductDTO, ProductDetailDTO, CategoryDTO, BrandDTO, InventoryDTO
+[ ] ProductServiceTest (JUnit 5 + Mockito)
+
+---
+
+## 📋 PHASE 3 — TODO: Cart, Wishlist & Coupon
+
+[ ] Coupon entity + CouponRepository + CouponService (validate, apply)
+[ ] Cart entity + CartItem entity
+[ ] CartRepository + CartItemRepository
+[ ] CartService (add/remove/update/saveForLater, calculateTotal, applyDiscount)
+    - Tax calculation: Decorator Pattern
+    - Shipping calculation: Decorator Pattern
+[ ] CartController (/cart endpoints)
+[ ] Wishlist entity + WishlistItem entity
+[ ] WishlistRepository
+[ ] WishlistService (add, remove, moveToCart)
+[ ] WishlistController (/wishlist endpoints)
+[ ] Request/Response DTOs: CouponRequest, CartDTO, CartItemDTO, WishlistDTO
+[ ] CartServiceTest
+
+---
+
+## 📋 PHASE 4 — TODO: Order, Checkout & Payment
+
+[ ] Order entity + OrderItem entity + OrderStatusHistory entity
+[ ] Payment entity + Shipment entity
+[ ] OrderRepository (with Specification for admin filters)
+[ ] OrderStatus enum (PENDING→CONFIRMED→PACKED→SHIPPED→OUT_FOR_DELIVERY→DELIVERED→CANCELLED→RETURNED)
+[ ] Order State Machine (State Pattern) — valid state transitions
+[ ] PaymentStrategy interface (Strategy Pattern)
+[ ] CashOnDeliveryStrategy (concrete strategy)
+[ ] PaymentStrategyFactory (Factory Method)
+[ ] OrderService (placeOrder, cancelOrder, returnOrder, getHistory, updateStatus)
+    - Facade Pattern over cart + payment + inventory operations
+[ ] OrderController (/orders endpoints)
+[ ] AdminOrderController (/admin/orders — update status, list all)
+[ ] OrderObserver interface (Observer Pattern) — notify on status change
+[ ] EmailNotificationObserver (stub — logs to console)
+[ ] InvoiceService (iText PDF generation)
+[ ] Request/Response DTOs: CheckoutRequest, OrderDTO, OrderItemDTO, PaymentDTO
+[ ] OrderServiceTest
+
+---
+
+## 📋 PHASE 5 — TODO: Reviews, Admin Dashboard & Analytics
+
+[ ] Review entity + ReviewRepository
+[ ] ReviewService (add, edit, delete, calculateAverageRating)
+[ ] ReviewController (/products/{id}/reviews)
+[ ] Admin: UserAdminController (/admin/users — list, activate/deactivate)
+[ ] Admin: ProductAdminController (/admin/products — bulk operations)
+[ ] Admin: Analytics endpoints (/admin/analytics)
+    - Total revenue, monthly revenue
+    - Best selling products (sorted by sold_count)
+    - Low stock alerts (inventory.quantity < low_stock_qty)
+    - Order status distribution
+    - New users count
+[ ] EmailService (JavaMailSender — stubbed with console logging)
+[ ] AnalyticsDTO
+
+---
+
+## 📋 PHASE 6 — TODO: Frontend (React.js)
+
+[ ] Vite + React.js project setup in /frontend
+[ ] Dependencies: react-router-dom, @reduxjs/toolkit, react-redux, axios, tailwindcss
+[ ] Redux Toolkit: authSlice, cartSlice, productSlice, orderSlice, wishlistSlice
+[ ] Axios interceptor (auto-attach Bearer token, handle 401 refresh)
+[ ] Pages:
+    [ ] Home — hero, featured products, categories, offers banner
+    [ ] Login / Register — form with validation
+    [ ] Product Listing — grid, filters sidebar, search, sort, pagination
+    [ ] Product Detail — images, variants, specs, reviews, add to cart/wishlist
+    [ ] Cart — items, quantity update, coupon input, price summary
+    [ ] Checkout — address selection, order summary
+    [ ] Payment — COD selection, place order
+    [ ] Order History — list + status badge
+    [ ] Order Detail — items, tracking timeline
+    [ ] Wishlist — cards with move to cart
+    [ ] User Profile — edit info, change password
+    [ ] Address Management — list, add, edit, set default
+    [ ] Admin Dashboard — stats, charts, tables
+[ ] Responsive UI with Tailwind CSS
+[ ] Toast notifications (react-hot-toast)
+[ ] Loading spinners, error boundaries, 404 page
+
+---
+
+## 🔧 KNOWN CONFIGURATION NOTES
+
+1. **MySQL**: Run sql/schema.sql before starting the app
+   Default: localhost:3306/ecommerce_db, root/root
+   Change in: backend/src/main/resources/application.yml
+
+2. **JWT Secret**: Change in production! Current dev secret in application.yml
+   Set env var: JWT_SECRET=<your-256-bit-base64-key>
+
+3. **Email**: Stubbed with console logging by default
+   Set env vars: MAIL_USERNAME, MAIL_PASSWORD for real SMTP
+
+4. **Swagger UI**: http://localhost:8080/api/swagger-ui.html
+   Login first at /auth/login, copy token, click Authorize in Swagger
+
+5. **File Uploads**: Stored in backend/uploads/ by default
+
+6. **BCrypt strength**: Set to 12 (production-grade). Reduce to 10 for tests.
+
+---
+
+## 🏗 DESIGN PATTERNS IMPLEMENTED
+
+| Pattern | Class | Phase |
+|---|---|---|
+| Singleton | JwtUtil, Spring beans | 1 |
+| Builder | User, AuthResponse, ApiResponse | 1 |
+| Factory Method | ApiResponse.success/error() | 1 |
+| Chain of Responsibility | JwtAuthenticationFilter, SecurityFilterChain | 1 |
+| Facade | UserService, AuthService | 1 |
+| Strategy | PaymentStrategy (interface) | 4 (TODO) |
+| Observer | OrderObserver (interface) | 4 (TODO) |
+| State | OrderStateMachine | 4 (TODO) |
+| Decorator | PriceCalculator (tax+shipping) | 3 (TODO) |
+| Command | OrderCommand | 4 (TODO) |
+| Template Method | OrderProcessor | 4 (TODO) |
+| Adapter | PaymentGatewayAdapter | 4 (TODO) |
+
+---
+
+## 📁 FILE STRUCTURE (Phase 1)
+
+backend/
+├── pom.xml
+└── src/
+    ├── main/
+    │   ├── java/com/ecommerce/
+    │   │   ├── EcommerceApplication.java
+    │   │   ├── config/
+    │   │   │   ├── SecurityConfig.java
+    │   │   │   └── SwaggerConfig.java
+    │   │   ├── controller/
+    │   │   │   ├── AuthController.java
+    │   │   │   └── UserController.java
+    │   │   ├── dto/
+    │   │   │   ├── request/
+    │   │   │   │   ├── RegisterRequest.java
+    │   │   │   │   ├── LoginRequest.java
+    │   │   │   │   ├── AddressRequest.java
+    │   │   │   │   └── ChangePasswordRequest.java
+    │   │   │   └── response/
+    │   │   │       ├── ApiResponse.java
+    │   │   │       ├── AuthResponse.java
+    │   │   │       ├── UserDTO.java
+    │   │   │       └── AddressDTO.java
+    │   │   ├── entity/
+    │   │   │   ├── User.java
+    │   │   │   ├── Role.java
+    │   │   │   └── Address.java
+    │   │   ├── exception/
+    │   │   │   ├── ResourceNotFoundException.java
+    │   │   │   ├── BadRequestException.java
+    │   │   │   ├── ForbiddenException.java
+    │   │   │   └── GlobalExceptionHandler.java
+    │   │   ├── repository/
+    │   │   │   ├── UserRepository.java
+    │   │   │   ├── RoleRepository.java
+    │   │   │   └── AddressRepository.java
+    │   │   ├── security/
+    │   │   │   ├── JwtUtil.java
+    │   │   │   ├── JwtAuthenticationFilter.java
+    │   │   │   └── CustomUserDetailsService.java
+    │   │   └── service/
+    │   │       ├── AuthService.java
+    │   │       └── UserService.java
+    │   └── resources/
+    │       └── application.yml
+    └── test/
+        └── java/com/ecommerce/service/
+            └── AuthServiceTest.java
+
+sql/
+└── schema.sql     (all tables, all phases)
