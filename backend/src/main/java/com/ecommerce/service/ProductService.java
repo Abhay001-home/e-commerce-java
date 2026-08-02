@@ -156,7 +156,7 @@ public class ProductService {
         // Add Specifications if provided
         if (request.getSpecifications() != null) {
             for (ProductRequest.SpecificationRequest sr : request.getSpecifications()) {
-                ProductSpecification spec = ProductSpecification.builder()
+                com.ecommerce.entity.ProductSpecification spec = com.ecommerce.entity.ProductSpecification.builder()
                         .specKey(sr.getSpecKey())
                         .specValue(sr.getSpecValue())
                         .sortOrder(sr.getSortOrder() != null ? sr.getSortOrder() : 0)
