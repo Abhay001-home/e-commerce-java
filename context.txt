@@ -1,7 +1,7 @@
 # ============================================================
 # E-Commerce Platform — context.txt
 # Purpose: Phase tracker for current and future development
-# Updated: Phase 2 Complete
+# Updated: Phase 3 Complete
 # ============================================================
 
 ## ✅ PHASE 1 — COMPLETE: Project Setup & Foundation
@@ -67,27 +67,34 @@
 
 ---
 
-## ⏳ PHASE 3 — IN PROGRESS / NEXT: Cart, Wishlist & Coupon
+## ✅ PHASE 3 — COMPLETE: Cart, Wishlist & Coupon
 
-### TODO:
-[ ] Coupon entity + CouponRepository
-[ ] CouponService (validate coupon, apply discount, calculate discount capping)
-[ ] CouponController (Admin CRUD, user validate endpoint)
+### Entities & Repositories
+✅ Coupon entity & CouponRepository (PERCENTAGE/FIXED_AMOUNT, usage limit, date range)
+✅ Cart entity & CartRepository (persisted totals, JOIN FETCH query)
+✅ CartItem entity & CartItemRepository (price snapshot, savedForLater flag)
+✅ Wishlist entity & WishlistRepository (JOIN FETCH with inventory for stock display)
+✅ WishlistItem entity & WishlistItemRepository (unique constraint, addedAt timestamp)
 
-[ ] Cart entity + CartItem entity
-[ ] CartRepository + CartItemRepository
-[ ] CartService (add item, update quantity, remove item, save for later, clear cart)
-    - Tax calculation (Decorator pattern)
-    - Shipping calculation (Decorator pattern)
-[ ] CartController (/cart endpoints)
+### Design Patterns — Cart Pricing (Decorator)
+✅ CartPricingDecorator interface
+✅ BaseCartPricer (subtotal from active items)
+✅ ShippingDecorator (free ≥ ₹999, else ₹79)
+✅ TaxDecorator (18% GST on subtotal)
+✅ CouponDecorator (PERCENTAGE with cap / FIXED_AMOUNT, outermost layer)
 
-[ ] Wishlist entity + WishlistItem entity
-[ ] WishlistRepository + WishlistItemRepository
-[ ] WishlistService (add to wishlist, remove from wishlist, move to cart)
-[ ] WishlistController (/wishlist endpoints)
+### DTOs
+✅ CouponRequest, CartItemRequest
+✅ CouponDTO, CartItemDTO, CartDTO, WishlistItemDTO, WishlistDTO
 
-[ ] DTOs: CouponRequest, CouponDTO, CartDTO, CartItemDTO, WishlistDTO
-[ ] CartServiceTest & CouponServiceTest
+### Services & Controllers
+✅ CouponService & CouponController (GET /coupons/validate, Admin CRUD)
+✅ CartService & CartController (GET /cart, add/update/remove items, save-for-later, coupon apply/remove, clear)
+✅ WishlistService & WishlistController (GET /wishlist, add/remove, move-to-cart)
+
+### Tests
+✅ CouponServiceTest (JUnit 5 + Mockito) — 7 test cases
+✅ CartServiceTest (JUnit 5 + Mockito) — 8 test cases
 
 ---
 

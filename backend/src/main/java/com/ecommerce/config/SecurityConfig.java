@@ -53,6 +53,7 @@ public class SecurityConfig {
             "/categories/**",
             "/brands/**",
             "/uploads/**",
+            "/coupons/validate",   // Phase 3: public coupon validation
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/v3/api-docs/**",
